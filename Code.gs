@@ -264,7 +264,8 @@ function readAppRecords(collection) {
   for (let i = 1; i < values.length; i++) {
     if (values[i][0] !== collection) continue;
     const id = String(values[i][1]);
-    (parts[id] ||= []).push([Number(values[i][2]), String(values[i][3])]);
+    if (!parts[id]) parts[id] = [];
+    parts[id].push([Number(values[i][2]), String(values[i][3])]);
   }
   return Object.keys(parts).map(id => {
     const json = parts[id].sort((a, b) => a[0] - b[0]).map(part => part[1]).join('');
