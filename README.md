@@ -46,7 +46,11 @@ npm run build
 npm run preview
 ```
 
-Build belum dapat dijalankan di lingkungan persiapan ini karena npm tidak tersedia. Google Sheet dan akun Vercel juga tidak diakses dari sesi ini, sehingga Apps Script maupun situs belum di-deploy atau diuji langsung terhadap akun Anda.
+Frontend sudah berhasil dibangun dan diterbitkan Vercel dari branch `main` (commit `048684c`). Build Vercel juga mencatat diagnostik TypeScript `Cannot find type definition file for 'vite/client'`; periksa kembali konfigurasi tipe jika menjalankan pemeriksaan TypeScript terpisah.
+
+> Apps Script belum berisi kode proyek atau deployment Web App, dan `GAS_WEB_APP_URL` serta `GAS_API_SECRET` belum diatur di Vercel. Karena itu, alur pendaftaran, pemeriksaan status, dan panel admin belum siap digunakan. Deployment Vercel juga masih memakai perlindungan SSO bawaan tim.
+
+> Penyelesaian backend memerlukan pemasangan `Code.gs` ke Apps Script, penyetelan rahasia API dan akun admin, lalu deployment sebagai Web App. Setelah URL `/exec` tersedia, masukkan URL dan rahasia ke environment Vercel, lalu deploy ulang. Jangan kirim rahasia API lewat chat atau simpan di repositori.
 
 ## Pemeriksaan keamanan arsip
 
