@@ -764,23 +764,28 @@ function handleApiRequest(request) {
 }
 
 function initializeFirstAdmin() {
-  const username = Browser.inputBox('Akun Admin Awal', 'Masukkan username admin (bukan kata sandi):', Browser.Buttons.OK_CANCEL);
-  if (username === 'cancel') return;
-  const password = Browser.inputBox('Kata Sandi Admin', 'Masukkan kata sandi minimal 10 karakter. Nilai hanya dipakai untuk membuat hash.', Browser.Buttons.OK_CANCEL);
-  if (password === 'cancel') return;
-  if (password.length < 10) throw new Error('Kata sandi minimal 10 karakter.');
-  const users = readAppRecords('users');
-  if (users.some(user => user.role === 'super_admin')) throw new Error('Admin utama sudah dibuat.');
-  const salt = Utilities.getUuid();
-  const user = { id: Utilities.getUuid(), username: String(username).trim(), email: '', name: 'Administrator', role: 'super_admin', jabatan: 'Administrator', isActive: true, createdAt: new Date().toISOString(), passwordSalt: salt, passwordHash: sha256Hex(salt + password) };
-  writeAppRecord('users', user.id, user);
-  SpreadsheetApp.getUi().alert('Admin awal berhasil dibuat. Kata sandi tidak disimpan sebagai teks.');
+  const props = PropertiesService.getScriptProperties();
+  const username = String(props.getProperty('INITIAL_ADMIN_USERNAME') || '').trim();
+  const password = String(props.getProperty('INITIAL_ADMIN_PASSWORD') || '');
+  try {
+    if (!username || !password) throw new Error('Tambahkan INITIAL_ADMIN_USERNAME dan INITIAL_ADMIN_PASSWORD di Project Settings > Script Properties, lalu jalankan fungsi ini lagi.');
+    if (password.length < 10) throw new Error('Kata sandi admin minimal 10 karakter.');
+    const users = readAppRecords('users');
+    if (users.some(user => user.role === 'super_admin')) throw new Error('Admin utama sudah dibuat.');
+    const salt = Utilities.getUuid();
+    const user = { id: Utilities.getUuid(), username: username, email: '', name: 'Administrator', role: 'super_admin', jabatan: 'Administrator', isActive: true, createdAt: new Date().toISOString(), passwordSalt: salt, passwordHash: sha256Hex(salt + password) };
+    writeAppRecord('users', user.id, user);
+    Logger.log('Admin awal berhasil dibuat. Kata sandi sementara telah dihapus dari Script Properties.');
+    return { success: true, message: 'Admin awal berhasil dibuat.' };
+  } finally {
+    props.deleteProperty('INITIAL_ADMIN_PASSWORD');
+    props.deleteProperty('INITIAL_ADMIN_USERNAME');
+  }
 }
 
 function setBackendSecret() {
-  const secret = Browser.inputBox('Rahasia API Backend', 'Tempelkan nilai rahasia acak yang sama dengan GAS_API_SECRET pada Vercel.', Browser.Buttons.OK_CANCEL);
-  if (secret === 'cancel') return;
-  if (String(secret).length < 32) throw new Error('Rahasia API harus memiliki setidaknya 32 karakter.');
-  PropertiesService.getScriptProperties().setProperty(APP_API_SECRET_PROPERTY, String(secret));
-  SpreadsheetApp.getUi().alert('Rahasia backend disimpan di Script Properties.');
+  const secret = PropertiesService.getScriptProperties().getProperty(APP_API_SECRET_PROPERTY);
+  if (!secret || secret.length < 32) throw new Error('Tambahkan APP_API_SECRET di Project Settings > Script Properties. Gunakan rahasia acak minimal 32 karakter dan masukkan nilai yang sama ke GAS_API_SECRET di Vercel.');
+  Logger.log('Rahasia backend sudah tersedia di Script Properties. Nilainya tidak ditampilkan.');
+  return { success: true, message: 'Rahasia backend sudah dikonfigurasi.' };
 }

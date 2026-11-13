@@ -16,8 +16,8 @@ Backend menangani alur utama seperti login admin, inisialisasi konten awal, pend
 
 1. Masuk ke spreadsheet dengan ID `1_zt6amQtAr3eGjSPqwaJrIT_irLZvICla9j5lOX2kEM` menggunakan akun yang memiliki akses editor.
 2. Pilih **Ekstensi → Apps Script**. Ganti isi `Code.gs` dengan file `Code.gs` dari proyek, lalu simpan.
-3. Jalankan fungsi `setBackendSecret`. Buat rahasia acak minimal 32 karakter menggunakan password manager. Masukkan nilai yang sama nanti ke environment Vercel. Rahasia tidak ditanam di kode atau frontend.
-4. Jalankan `initializeFirstAdmin`. Masukkan username dan kata sandi admin pilihan Anda (minimal 10 karakter) saat diminta. Kata sandi hanya disimpan sebagai hash bersalt.
+3. Buka **Project Settings** (ikon roda gigi) → **Script Properties**. Tambahkan `APP_API_SECRET` dengan rahasia acak minimal 32 karakter; simpan nilainya di password manager untuk nanti dimasukkan ke Vercel. Jangan taruh rahasia di kode.
+4. Di **Script Properties**, tambahkan sementara `INITIAL_ADMIN_USERNAME` dan `INITIAL_ADMIN_PASSWORD`. Gunakan kata sandi admin minimal 10 karakter. Jalankan fungsi `setBackendSecret`, lalu `initializeFirstAdmin`. Kata sandi admin sementara otomatis dihapus setelah fungsi dijalankan; yang disimpan pada data aplikasi hanya hash bersalt.
 5. Pilih **Deploy → New deployment → Web app**. Pilih **Execute as: Me** dan akses **Anyone**. Permintaan API harus melewati fungsi Vercel yang memeriksa rahasia backend; jangan membagikan URL Apps Script beserta rahasia API.
 6. Deploy dan izinkan akses spreadsheet yang diminta Google. Salin URL Web App yang berakhiran `/exec`.
 
@@ -29,7 +29,7 @@ Backend menangani alur utama seperti login admin, inisialisasi konten awal, pend
 2. Di Vercel pilih **Add New → Project**, lalu impor repositori tersebut. Pilih folder proyek yang berisi `package.json` dan `vercel.json` sebagai root.
 3. Tambahkan dua environment variable server berikut pada **Settings → Environment Variables**:
    - `GAS_WEB_APP_URL`: URL Web App Apps Script berakhiran `/exec`.
-   - `GAS_API_SECRET`: rahasia yang sama dengan yang dimasukkan melalui `setBackendSecret`.
+   - `GAS_API_SECRET`: nilai yang sama dengan `APP_API_SECRET` di Script Properties.
 4. Pilih Node.js 20.19+ atau 22.12+, build command `npm run build`, dan output `dist`. Deploy ulang setelah menambahkan environment variables.
 5. Setelah admin masuk, buka **Pengaturan → Google Sheet (Apps Script)**, masukkan URL Web App, lalu simpan. Ini mengaktifkan tombol sinkronisasi pada panel; URL yang dipakai backend tetap berasal dari environment Vercel.
 6. Uji situs publik, pendaftaran, cek status, login admin, lalu perubahan status dari admin. Pastikan baris muncul pada `APP_DATA` dan rekap pendaftar muncul pada `DATA_PENDAFTAR_SPMB`.
