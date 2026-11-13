@@ -1,0 +1,6 @@
+{
+  "name": "SDIT Insan Cendikia Kalibaru - Website & SPMB",
+  "description": "Website resmi dan Sistem Penerimaan Murid Baru (SPMB) SDIT Insan Cendikia Kalibaru Banyuwangi. Membangun Generasi Islami, Cerdas, dan Berakhlak Mulia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

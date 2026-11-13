@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "SchoolProfile": {
+      "title": "SchoolProfile",
+      "description": "Profil resmi SDIT Insan Cendikia Kalibaru",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "tagline": { "type": "string" },
+        "npsn": { "type": "string" },
+        "accreditation": { "type": "string" },
+        "address": { "type": "string" },
+        "coordinates": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "headmasterName": { "type": "string" },
+        "headmasterGreeting": { "type": "string" },
+        "vision": { "type": "string" },
+        "mission": { "type": "array", "items": { "type": "string" } },
+        "goals": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "Registration": {
+      "title": "Registration",
+      "description": "Formulir pendaftaran calon murid baru SPMB",
+      "type": "object",
+      "properties": {
+        "registrationNumber": { "type": "string" },
+        "userId": { "type": "string" },
+        "waveId": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Menunggu Verifikasi", "Perlu Perbaikan", "Terverifikasi", "Dalam Seleksi", "Diterima", "Tidak Diterima", "Daftar Ulang"]
+        },
+        "student": { "type": "object" },
+        "parent": { "type": "object" },
+        "documents": { "type": "array" },
+        "verificationLogs": { "type": "array" },
+        "selection": { "type": "object" },
+        "reRegistration": { "type": "object" },
+        "submittedAt": { "type": "string" }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "Pengguna dengan Role-Based Access Control dan profil akun",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "phone": { "type": "string" },
+        "jabatan": { "type": "string" },
+        "role": {
+          "type": "string",
+          "enum": ["super_admin", "admin_sekolah", "panitia_spmb", "tim_seleksi", "kepala_sekolah", "wali_murid"]
+        },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "lastLoginAt": { "type": "string" }
+      },
+      "required": ["id", "username", "email", "name", "role", "jabatan", "isActive", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/school_profiles/{profileId}": { "schema": "SchoolProfile" },
+    "/registrations/{regId}": { "schema": "Registration" },
+    "/users/{userId}": { "schema": "User" }
+  }
+}

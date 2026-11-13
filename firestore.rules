@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Health & diagnostic test
+    match /system_health/{docId} {
+      allow read, write: if true;
+    }
+
+    // Public and SPMB content collections
+    match /school_profiles/{profileId} {
+      allow read, write: if true;
+    }
+
+    match /spmb_waves/{waveId} {
+      allow read, write: if true;
+    }
+
+    match /programs/{programId} {
+      allow read, write: if true;
+    }
+
+    match /extracurriculars/{ekskulId} {
+      allow read, write: if true;
+    }
+
+    match /teachers/{teacherId} {
+      allow read, write: if true;
+    }
+
+    match /gallery/{itemId} {
+      allow read, write: if true;
+    }
+
+    match /achievements/{achievementId} {
+      allow read, write: if true;
+    }
+
+    match /news/{newsId} {
+      allow read, write: if true;
+    }
+
+    // Registrations & applicant records
+    match /registrations/{regId} {
+      allow read, write: if true;
+    }
+
+    // Verification and Assessment logs
+    match /verification_logs/{logId} {
+      allow read, write: if true;
+    }
+
+    // Activity audit logs
+    match /activity_logs/{logId} {
+      allow read, write: if true;
+    }
+
+    // System and WhatsApp settings
+    match /settings/{docId} {
+      allow read, write: if true;
+    }
+
+    // Users & personnel accounts
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Catch-all fallback
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
